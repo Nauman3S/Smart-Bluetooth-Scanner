@@ -3,11 +3,10 @@ String channelId;
 String userKey;
 String apiKey;
 String apid;
-String hostName = "CPT";
+String hostName = "SBS";
 String apPass;
 String settingsPass;
-String ticker="BTC";
-String currency="USD";
+
 
 #if defined(ARDUINO_ARCH_ESP8266)
 #include <ESP8266WiFi.h>

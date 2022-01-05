@@ -51,18 +51,7 @@
       "type": "ACElement",
       "value": "<hr>"
     },
-    {
-      "name": "ticker",
-      "type": "ACInput",
-      "value": "BTC",
-      "label": "Crypto Name"
-    },
-    {
-      "name": "currency",
-      "type": "ACInput",
-      "value": "USD",
-      "label": "Currency"
-    },
+    
     {
       "name": "newline",
       "type": "ACElement",
@@ -72,7 +61,7 @@
       "name": "hostname",
       "type": "ACInput",
       "label": "ESP hostname(Device & AP Name)",
-      "value": "CPT"
+      "value": "SBS"
     },
     {
       "name": "apPass",

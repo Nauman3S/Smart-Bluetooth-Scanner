@@ -46,17 +46,11 @@ String saveParams(AutoConnectAux &aux, PageArgument &args) //save the settings
     hostName = args.arg("hostname");
     hostName.trim();
 
-    ticker = args.arg("ticker");
-    ticker.trim();
-
-    currency = args.arg("currency");
-    currency.trim();
-
     // The entered value is owned by AutoConnectAux of /mqtt_setting.
     // To retrieve the elements of /mqtt_setting, it is necessary to get
     // the AutoConnectAux object of /mqtt_setting.
     File param = FlashFS.open(PARAM_FILE, "w");
-    portal.aux("/mqtt_setting")->saveElement(param, {"mqttserver", "channelid", "userkey", "apikey","ticker", "currency","hostname", "apPass", "settingsPass"});
+    portal.aux("/mqtt_setting")->saveElement(param, {"mqttserver", "channelid", "userkey", "apikey", "ticker", "currency", "hostname", "apPass", "settingsPass"});
     param.close();
 
     // Echo back saved parameters to AutoConnectAux page.
@@ -69,8 +63,7 @@ String saveParams(AutoConnectAux &aux, PageArgument &args) //save the settings
     echo.value += "ESP host name: " + hostName + "<br>";
     echo.value += "AP Password: " + apPass + "<br>";
     echo.value += "Settings Page Password: " + settingsPass + "<br>";
-    mqttPublish("CPT/config/currency", currency);
-    mqttPublish("CPT-data/" + String(ss.getMacAddress()) + String("/ticker"), String(ticker)); //publish data to mqtt broker
+
     ESP.restart();
     return String("");
 }
@@ -95,7 +88,7 @@ bool whileCP()
 
     loopLEDMatrix();
     loopLEDHandler();
-    
+
     if (inAP == 0)
     {
         updateMessage("Connect to WiFi");
@@ -141,8 +134,7 @@ void setup() //main setup functions
         AutoConnectInput &userkeyElm = mqtt_setting["userkey"].as<AutoConnectInput>();
         AutoConnectInput &apikeyElm = mqtt_setting["apikey"].as<AutoConnectInput>();
         AutoConnectInput &settingsPassElm = mqtt_setting["settingsPass"].as<AutoConnectInput>();
-        AutoConnectInput &tickerElm = mqtt_setting["ticker"].as<AutoConnectInput>();
-        AutoConnectInput &currencyElm = mqtt_setting["currency"].as<AutoConnectInput>();
+
         //vibSValueElm.value="VibS:11";
         serverName = String(serverNameElm.value);
         channelId = String(channelidElm.value);
@@ -151,8 +143,7 @@ void setup() //main setup functions
         hostName = String(hostnameElm.value);
         apPass = String(apPassElm.value);
         settingsPass = String(settingsPassElm.value);
-        ticker = String(tickerElm.value);
-        currency = String(currencyElm.value);
+
         if (hostnameElm.value.length())
         {
             //hostName=hostName+ String("-") + String(GET_CHIPID(), HEX);
@@ -195,7 +186,7 @@ void setup() //main setup functions
     Serial.println(hostName);
     Serial.print("Password: ");
     Serial.println(apPass);
-    config.title = "Cryptocurrency Price Ticker"; //set title of webapp
+    config.title = "Smart Bluetooth Scanner"; //set title of webapp
     Serial.print("Device Hostname: ");
     Serial.println(hostName);
     //add different tabs on homepage
@@ -231,9 +222,9 @@ void setup() //main setup functions
     MDNS.addService("http", "tcp", 80);
     mqttConnect(); //start mqtt
 
-    mqttPublish("CPT/config/currency", currency);
+    mqttPublish("sbs/config/", "000");
 }
-String priceData = "00";
+
 int k = 0;
 void loop()
 {
@@ -243,14 +234,8 @@ void loop()
 
     if (millis() - lastPub > updateInterval) //publish data to mqtt server
     {
-        mqttPublish("CPT-data/" + String(ss.getMacAddress()) + String("/ticker"), String(ticker)); //publish data to mqtt broker
-        priceData = getCrypto();
-        k++;
-        if (k > 100)
-        {
-            k = 0;
-        }
-        updateMessage(priceData);
+        mqttPublish("sbs-data/" + String(ss.getMacAddress()) + String("/ticker"), String("abc")); //publish data to mqtt broker
+
         ledState(ACTIVE_MODE);
 
         lastPub = millis();

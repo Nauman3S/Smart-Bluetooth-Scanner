@@ -43,9 +43,9 @@ void handleRoot()
         "</head>"
         "<body>"
         "<div class=\"menu\">" AUTOCONNECT_LINK(BAR_24) "</div>"
-                                                        "Smart Crypto Device<br>");
+                                                        "Smart Bluetooth Scanner Device<br>");
 
-    page += String(F("<h1>Smart Cryptocurrency Price Ticker</h1>"));
+    page += String(F("<h1>Smart Bluetooth Scanner</h1>"));
 
     page += String(F("<h3>Device ID: "));
     page += ss.getMacAddress();
