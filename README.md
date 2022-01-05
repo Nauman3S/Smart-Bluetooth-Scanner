@@ -113,6 +113,7 @@ Other components pin connection details
 
 | HC05 Pins | ESP32 | 
 | :--- | :--- | 
+| `Key` | `3v3` |
 | `VCC` | `Vin` |
 | `GND` | `GND` | 
 | `TX` | `RX2` | 
