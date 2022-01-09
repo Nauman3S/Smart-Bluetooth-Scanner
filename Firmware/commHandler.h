@@ -32,10 +32,11 @@ public:
         rssi.trim();
         rssi = ss.StringSeparator(rssi, ':', 1);
         rssi.trim();
-        rssi.replace("\nName:", "");
-        rssi.replace("Name:", "");
-        rssi.replace("\nName", "");
-        rssi.replace("Name", "");
+        rssi = rssi.substring(0, 2);
+        // rssi.replace("\nName:", "");
+        // rssi.replace("Name:", "");
+        // rssi.replace("\nName", "");
+        // rssi.replace("Name", "");
 
         // Serial.println(name);
         // Serial.println(address);
@@ -52,9 +53,10 @@ public:
         if (counter == 0)
         {
             addresses[counter] = address;
-            if (name == String(" ") || name == String(""))
+            if (name.length() <= 2)
             {
                 name = String("Unknown");
+                names[counter] = name;
             }
             else
             {
@@ -77,9 +79,10 @@ public:
                 else
                 {
                     addresses[counter] = address;
-                    if (name == String(" ") || name == String(""))
+                    if (name.length() <= 2)
                     {
                         name = String("Unknown");
+                        names[counter] = name;
                     }
                     else
                     {
@@ -100,12 +103,13 @@ public:
             Serial.println("********");
             Serial.print("Name: ");
             Serial.println(names[i]);
-            Serial.print("addresse: ");
+            Serial.print("address: ");
             Serial.println(addresses[i]);
             Serial.print("rssi: ");
             Serial.println(rssis[i]);
             Serial.println("********");
         }
+        Serial.println("--END SCAN--");
     }
 };
 
