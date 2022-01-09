@@ -2,7 +2,7 @@
 #include "MQTTFuncs.h" //MQTT related functions
 #include "webApp.h"    //Captive Portal webpages
 #include <FS.h>        //ESP32 File System
-#include "matrixController.h"
+#include "commHandler.h"
 IPAddress ipV(192, 168, 4, 1);
 String loadParams(AutoConnectAux &aux, PageArgument &args) //function to load saved settings
 {
@@ -50,14 +50,14 @@ String saveParams(AutoConnectAux &aux, PageArgument &args) //save the settings
     // To retrieve the elements of /mqtt_setting, it is necessary to get
     // the AutoConnectAux object of /mqtt_setting.
     File param = FlashFS.open(PARAM_FILE, "w");
-    portal.aux("/mqtt_setting")->saveElement(param, {"mqttserver", "channelid", "userkey", "apikey", "ticker", "currency", "hostname", "apPass", "settingsPass"});
+    portal.aux("/mqtt_setting")->saveElement(param, {"mqttserver", "channelid", "userkey", "apikey",  "hostname", "apPass", "settingsPass"});
     param.close();
 
     // Echo back saved parameters to AutoConnectAux page.
     AutoConnectText &echo = aux["parameters"].as<AutoConnectText>();
     echo.value = "Server: " + serverName + "<br>";
     echo.value += "Channel ID: " + channelId + "<br>";
-    echo.value += "Ticker: " + ticker + "<br>";
+    
     echo.value += "Username: " + userKey + "<br>";
     echo.value += "Password: " + apiKey + "<br>";
     echo.value += "ESP host name: " + hostName + "<br>";
@@ -86,12 +86,11 @@ uint8_t inAP = 0;
 bool whileCP()
 {
 
-    loopLEDMatrix();
-    loopLEDHandler();
+    
 
     if (inAP == 0)
     {
-        updateMessage("Connect to WiFi");
+        
         ledState(AP_MODE);
         inAP = 1;
     }
@@ -101,7 +100,7 @@ void setup() //main setup functions
 {
     Serial.begin(115200);
     delay(1000);
-    setupLEDMatrix();
+    setupCommHandler();
     Serial.print("Device ID: ");
     Serial.println(ss.getMacAddress());
 
@@ -230,7 +229,7 @@ void loop()
 {
     server.handleClient();
     portal.handleRequest();
-    loopLEDMatrix();
+    loopCommHandler();
 
     if (millis() - lastPub > updateInterval) //publish data to mqtt server
     {

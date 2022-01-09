@@ -23,7 +23,7 @@ String getCrypto()
 }
 void MQTTUnSubscribe()
 {
-    String topicN = String("CPT/device/price");
+    String topicN = String("SBS/device/config");
 
     mqttClient.unsubscribe(topicN.c_str());
 }
@@ -34,7 +34,7 @@ void MQTTSubscriptions()
     // for(int i=0;i<10;i++){
     //   IMEIsList[i]==String("NA");
     // }
-    String topicN = String("CPT/device/price");
+    String topicN = String("SBS/device/config");
 
     mqttClient.subscribe(topicN.c_str());
 }
@@ -50,7 +50,7 @@ void callback(char *topic, byte *payload, unsigned int length)
         pLoad = pLoad + String((char)payload[i]);
     }
     Serial.println();
-    if (String(topic) == String("CPT/device/price"))
+    if (String(topic) == String("SBS/device/config"))
     {
         setCrypto(pLoad);
     }

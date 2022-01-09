@@ -113,13 +113,13 @@ Other components pin connection details
 
 | HC05 Pins | ESP32 | 
 | :--- | :--- | 
-| `Key` | `3v3` |
+| `Key` | `3v3` (if not working use `Vin` pin) |
 | `VCC` | `Vin` |
 | `GND` | `GND` | 
 | `TX` | `RX2` | 
 | `RX` | `TX2` | 
 
-
+Note: If the scanning process does not start, connect Key pin to Vin pin instead of 3v3 pin of ESP32.
 
 ## Usage <a name = "usage"></a>
 
