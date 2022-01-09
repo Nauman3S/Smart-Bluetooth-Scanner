@@ -11,7 +11,7 @@ private:
 public:
     void addAddress(String payload)
     {
-        Serial.println("******************");
+        // Serial.println("******************");
         String name = ss.StringSeparator(payload, ',', 0);
         name.trim();
         name = ss.StringSeparator(name, ':', 1);
@@ -37,13 +37,13 @@ public:
         rssi.replace("\nName", "");
         rssi.replace("Name", "");
 
-        Serial.println(name);
-        Serial.println(address);
-        Serial.println(data);
-        Serial.println(rssi);
+        // Serial.println(name);
+        // Serial.println(address);
+        // Serial.println(data);
+        // Serial.println(rssi);
 
-        Serial.println(counter);
-        Serial.println("******************");
+        // Serial.println(counter);
+        // Serial.println("******************");
 
         if (counter == 48)
         {
@@ -52,7 +52,14 @@ public:
         if (counter == 0)
         {
             addresses[counter] = address;
-            names[counter] = name;
+            if (name == String(" ") || name == String(""))
+            {
+                name = String("Unknown");
+            }
+            else
+            {
+                names[counter] = name;
+            }
             rssis[counter] = rssi;
             counter++;
         }
@@ -70,7 +77,14 @@ public:
                 else
                 {
                     addresses[counter] = address;
-                    names[counter] = name;
+                    if (name == String(" ") || name == String(""))
+                    {
+                        name = String("Unknown");
+                    }
+                    else
+                    {
+                        names[counter] = name;
+                    }
                     rssis[counter] = rssi;
                     counter++;
                     break;
