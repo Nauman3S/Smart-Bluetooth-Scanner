@@ -50,14 +50,14 @@ String saveParams(AutoConnectAux &aux, PageArgument &args) //save the settings
     // To retrieve the elements of /mqtt_setting, it is necessary to get
     // the AutoConnectAux object of /mqtt_setting.
     File param = FlashFS.open(PARAM_FILE, "w");
-    portal.aux("/mqtt_setting")->saveElement(param, {"mqttserver", "channelid", "userkey", "apikey",  "hostname", "apPass", "settingsPass"});
+    portal.aux("/mqtt_setting")->saveElement(param, {"mqttserver", "channelid", "userkey", "apikey", "hostname", "apPass", "settingsPass"});
     param.close();
 
     // Echo back saved parameters to AutoConnectAux page.
     AutoConnectText &echo = aux["parameters"].as<AutoConnectText>();
     echo.value = "Server: " + serverName + "<br>";
     echo.value += "Channel ID: " + channelId + "<br>";
-    
+
     echo.value += "Username: " + userKey + "<br>";
     echo.value += "Password: " + apiKey + "<br>";
     echo.value += "ESP host name: " + hostName + "<br>";
@@ -86,11 +86,9 @@ uint8_t inAP = 0;
 bool whileCP()
 {
 
-    
-
     if (inAP == 0)
     {
-        
+
         ledState(AP_MODE);
         inAP = 1;
     }
@@ -221,7 +219,7 @@ void setup() //main setup functions
     MDNS.addService("http", "tcp", 80);
     mqttConnect(); //start mqtt
 
-    mqttPublish("sbs/config/", "000");
+    // mqttPublish("sbs/config/", "000");
 }
 
 int k = 0;
@@ -233,7 +231,6 @@ void loop()
 
     if (millis() - lastPub > updateInterval) //publish data to mqtt server
     {
-        mqttPublish("sbs-data/" + String(ss.getMacAddress()) + String("/ticker"), String("abc")); //publish data to mqtt broker
 
         ledState(ACTIVE_MODE);
 

@@ -13,38 +13,8 @@ public:
     {
         // Serial.println("******************");
         String name = ss.StringSeparator(payload, ',', 0);
-        name.trim();
-        name = ss.StringSeparator(name, ':', 1);
-        name.trim();
-
         String address = ss.StringSeparator(payload, ',', 1);
-        address.trim();
-        // address=ss.StringSeparator(address, ':', 1);
-        address.replace("Address: ", "");
-        // address.trim();
-
-        String data = ss.StringSeparator(payload, ',', 2);
-        data.trim();
-        data = ss.StringSeparator(data, ':', 1);
-        data.trim();
-
-        String rssi = ss.StringSeparator(payload, ',', 3);
-        rssi.trim();
-        rssi = ss.StringSeparator(rssi, ':', 1);
-        rssi.trim();
-        rssi = rssi.substring(0, 2);
-        // rssi.replace("\nName:", "");
-        // rssi.replace("Name:", "");
-        // rssi.replace("\nName", "");
-        // rssi.replace("Name", "");
-
-        // Serial.println(name);
-        // Serial.println(address);
-        // Serial.println(data);
-        // Serial.println(rssi);
-
-        // Serial.println(counter);
-        // Serial.println("******************");
+        String rssi = ss.StringSeparator(payload, ',', 2);
 
         if (counter == 48)
         {
@@ -53,15 +23,7 @@ public:
         if (counter == 0)
         {
             addresses[counter] = address;
-            if (name.length() <= 2)
-            {
-                name = String("Unknown");
-                names[counter] = name;
-            }
-            else
-            {
-                names[counter] = name;
-            }
+            names[counter] = name;
             rssis[counter] = rssi;
             counter++;
         }
@@ -79,15 +41,7 @@ public:
                 else
                 {
                     addresses[counter] = address;
-                    if (name.length() <= 2)
-                    {
-                        name = String("Unknown");
-                        names[counter] = name;
-                    }
-                    else
-                    {
-                        names[counter] = name;
-                    }
+                    names[counter] = name;
                     rssis[counter] = rssi;
                     counter++;
                     break;
@@ -107,6 +61,8 @@ public:
             Serial.println(addresses[i]);
             Serial.print("rssi: ");
             Serial.println(rssis[i]);
+            Serial.print("counter: ");
+            Serial.println(counter);
             Serial.println("********");
         }
         Serial.println("--END SCAN--");
@@ -126,7 +82,15 @@ void loopCommHandler()
     if (DataSerial.available())
     {
         data = DataSerial.readString();
-        sc.addAddress(data);
-        sc.printAddress();
+        data = ss.getMacAddress() + String(",") + data;
+        // Serial.println("----");
+        // Serial.println(data);
+        // Serial.println("----");
+        // String a=ss.StringSeparator(data,'\0',0);
+        mqttPublish("BLEScanner/device/data", data);
+        // mqttPublish("BLEScanner/device/data", ss.getMacAddress());
+        // sc.addAddress(data);
+        // sc.printAddress();
+        // Serial.println(data);
     }
 }

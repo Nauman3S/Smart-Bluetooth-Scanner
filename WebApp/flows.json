@@ -1,286 +1,202 @@
 [
     {
-        "id": "f6f2187d.f17ca8",
+        "id": "8a64b2be14e1014a",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "BLEScanner",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "11b312606f854e19",
-        "type": "ui_joystick",
-        "z": "f6f2187d.f17ca8",
+        "id": "1ad4a6b70f7aa172",
+        "type": "mqtt in",
+        "z": "8a64b2be14e1014a",
         "name": "",
-        "group": "75e0de12f03e09f3",
-        "order": 2,
-        "width": 3,
-        "height": 3,
-        "trigger": "all",
-        "timeInterval": 0,
-        "useThemeColor": true,
-        "color": "#000000",
-        "threshold": 0.1,
-        "directions": "all",
-        "shape": "circle",
-        "centerAtRelease": true,
-        "x": 470,
-        "y": 200,
+        "topic": "BLEScanner/device/data",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "28f7ceb9.8189a2",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "x": 190,
+        "y": 520,
         "wires": [
             [
-                "2468bcee5e2cca1f"
+                "306d39b8cec81274",
+                "87201e186ac5f1fc"
             ]
         ]
     },
     {
-        "id": "18c6dabcfc8be2a6",
+        "id": "87201e186ac5f1fc",
         "type": "debug",
-        "z": "f6f2187d.f17ca8",
+        "z": "8a64b2be14e1014a",
         "name": "",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1150,
-        "y": 240,
+        "x": 600,
+        "y": 520,
         "wires": []
     },
     {
-        "id": "2468bcee5e2cca1f",
+        "id": "306d39b8cec81274",
         "type": "function",
-        "z": "f6f2187d.f17ca8",
-        "name": "Direction",
-        "func": "g=msg.payload;\n\nmsg.payload=g['direction']['angle'];\nreturn msg;",
+        "z": "8a64b2be14e1014a",
+        "name": "scanParser",
+        "func": "var g=msg.payload\nvar data=g.split(';');\nmsg.payload=data;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 680,
-        "y": 240,
+        "x": 310,
+        "y": 740,
         "wires": [
             [
-                "18c6dabcfc8be2a6",
-                "7f9c929bc191159e"
+                "ceeded1a1f496b04"
             ]
         ]
     },
     {
-        "id": "5c1387e9418bbee9",
-        "type": "ui_numeric",
-        "z": "f6f2187d.f17ca8",
-        "name": "",
-        "label": "ESC Speed",
-        "tooltip": "",
-        "group": "75e0de12f03e09f3",
-        "order": 8,
-        "width": 0,
-        "height": 0,
-        "wrap": false,
-        "passthru": true,
-        "topic": "topic",
-        "topicType": "msg",
-        "format": "{{value}}",
-        "min": 0,
-        "max": "180",
-        "step": 1,
-        "className": "",
-        "x": 480,
-        "y": 440,
+        "id": "ec9722748402c62b",
+        "type": "sqlite",
+        "z": "8a64b2be14e1014a",
+        "mydb": "16d7cc710fadc2b8",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "database",
+        "x": 460,
+        "y": 160,
         "wires": [
             [
-                "d729aaf6a3e3f645"
+                "a37e537d71411bb2"
             ]
         ]
     },
     {
-        "id": "2ecbd70cf814dd7f",
-        "type": "ui_button",
-        "z": "f6f2187d.f17ca8",
-        "name": "",
-        "group": "75e0de12f03e09f3",
-        "order": 10,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "label": "Stop",
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "payload": "stop",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "x": 470,
-        "y": 280,
+        "id": "6e25bf92705e126e",
+        "type": "inject",
+        "z": "8a64b2be14e1014a",
+        "name": "createTable",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "CREATE TABLE scan(    ID INTEGER PRIMARY KEY     AUTOINCREMENT,    MAC           TEXT    ,    Name            TEXT     ,    Address        TEXT,    RSSI\t\tText );",
+        "payloadType": "date",
+        "x": 260,
+        "y": 120,
         "wires": [
             [
-                "7f9c929bc191159e"
+                "ec9722748402c62b"
             ]
         ]
     },
     {
-        "id": "d729aaf6a3e3f645",
-        "type": "mqtt out",
-        "z": "f6f2187d.f17ca8",
+        "id": "a37e537d71411bb2",
+        "type": "debug",
+        "z": "8a64b2be14e1014a",
         "name": "",
-        "topic": "brushlessCar/speed",
-        "qos": "0",
-        "retain": "false",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "28f7ceb9.8189a2",
-        "x": 750,
-        "y": 460,
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 120,
         "wires": []
     },
     {
-        "id": "7f9c929bc191159e",
-        "type": "mqtt out",
-        "z": "f6f2187d.f17ca8",
-        "name": "",
-        "topic": "brushlessCar/position",
-        "qos": "0",
-        "retain": "false",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "28f7ceb9.8189a2",
-        "x": 960,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "7aebc83d480f6379",
-        "type": "ui_switch",
-        "z": "f6f2187d.f17ca8",
-        "name": "",
-        "label": "Arduino On-board LED",
-        "tooltip": "",
-        "group": "75e0de12f03e09f3",
-        "order": 9,
-        "width": 0,
-        "height": 0,
-        "passthru": true,
-        "decouple": "false",
-        "topic": "topic",
-        "topicType": "msg",
-        "style": "",
-        "onvalue": "on",
-        "onvalueType": "str",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "off",
-        "offvalueType": "str",
-        "officon": "",
-        "offcolor": "",
-        "animate": false,
-        "className": "",
-        "x": 490,
-        "y": 580,
+        "id": "d4cf7cb04eb8679a",
+        "type": "inject",
+        "z": "8a64b2be14e1014a",
+        "name": "showAll",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "SELECT * FROM scan",
+        "payloadType": "date",
+        "x": 250,
+        "y": 180,
         "wires": [
             [
-                "a5f92faefcfbee46"
+                "ec9722748402c62b"
             ]
         ]
     },
     {
-        "id": "a5f92faefcfbee46",
-        "type": "mqtt out",
-        "z": "f6f2187d.f17ca8",
-        "name": "",
-        "topic": "GsmClientTest/ledStatus",
-        "qos": "0",
-        "retain": "false",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "28f7ceb9.8189a2",
-        "x": 750,
-        "y": 580,
-        "wires": []
+        "id": "ceeded1a1f496b04",
+        "type": "function",
+        "z": "8a64b2be14e1014a",
+        "name": "dbInsert",
+        "func": "var g=msg.payload\nvar mac=g[0].split(',')\ng[0]=mac[1]+','+mac[2]+','+mac[3]\n\nvar vals=\"\";\nvar spl;\nfor (let i=0;i<5;i++){\n  g[i]=g[i].replace('\\r\\n','')\n  g[i]=g[i].replace('\\n','')\n  \n  g[i]=mac[0]+','+g[i];\n  spl=g[i].split(',');\n  g[i]='\\\"'+spl[0]+'\\\",\\\"'+spl[1]+'\\\",\\\"'+spl[2]+'\\\",\\\"'+spl[3]+'\\\"';\n  vals=vals+'('+g[i]+'),';\n  \n   \n}\nvals=vals.slice(0, -1);\n\n\nmsg.topic='INSERT OR REPLACE INTO scan(MAC,Name,Address,RSSI) VALUES '+vals;\n// for (let i = 0; i < g.length; i++) {\n// msg.topic='INSERT OR REPLACE INTO scan(MAC, Name, Address, RSSI) VALUES($MAC,$Name,$Address,$RSSI)'\n// msg.payload=g;\n// }\n//msg.payload=pHolders;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 740,
+        "wires": [
+            [
+                "87201e186ac5f1fc",
+                "ec9722748402c62b"
+            ]
+        ]
     },
     {
-        "id": "7d724facc36b18c8",
-        "type": "ui_spacer",
-        "z": "f6f2187d.f17ca8",
-        "name": "spacer",
-        "group": "75e0de12f03e09f3",
-        "order": 1,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "d5fcbf96299a9315",
-        "type": "ui_spacer",
-        "z": "f6f2187d.f17ca8",
-        "name": "spacer",
-        "group": "75e0de12f03e09f3",
-        "order": 3,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "3e5b224aeaab4b0f",
-        "type": "ui_spacer",
-        "z": "f6f2187d.f17ca8",
-        "name": "spacer",
-        "group": "75e0de12f03e09f3",
-        "order": 4,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "f85e0b51105ab907",
-        "type": "ui_spacer",
-        "z": "f6f2187d.f17ca8",
-        "name": "spacer",
-        "group": "75e0de12f03e09f3",
-        "order": 5,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "16055274cdeaa2b5",
-        "type": "ui_spacer",
-        "z": "f6f2187d.f17ca8",
-        "name": "spacer",
-        "group": "75e0de12f03e09f3",
-        "order": 6,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "72604ef9ecf6e702",
-        "type": "ui_spacer",
-        "z": "f6f2187d.f17ca8",
-        "name": "spacer",
-        "group": "75e0de12f03e09f3",
-        "order": 7,
-        "width": 6,
-        "height": 1
-    },
-    {
-        "id": "75e0de12f03e09f3",
-        "type": "ui_group",
-        "name": "Brushless Motors Controller",
-        "tab": "713a99086b6030f2",
-        "order": 1,
-        "disp": true,
-        "width": "15",
-        "collapse": false,
-        "className": ""
+        "id": "ba9bf9b4245a7d74",
+        "type": "inject",
+        "z": "8a64b2be14e1014a",
+        "name": "DropTable",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "DROP TABLE scan",
+        "payloadType": "date",
+        "x": 260,
+        "y": 220,
+        "wires": [
+            [
+                "ec9722748402c62b"
+            ]
+        ]
     },
     {
         "id": "28f7ceb9.8189a2",
@@ -309,12 +225,9 @@
         "sessionExpiry": ""
     },
     {
-        "id": "713a99086b6030f2",
-        "type": "ui_tab",
-        "name": "Brushless Motors",
-        "icon": "dashboard",
-        "order": 2,
-        "disabled": false,
-        "hidden": false
+        "id": "16d7cc710fadc2b8",
+        "type": "sqlitedb",
+        "db": "database",
+        "mode": "RWC"
     }
 ]
