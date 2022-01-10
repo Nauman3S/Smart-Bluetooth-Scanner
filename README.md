@@ -22,9 +22,6 @@
 - [About](#about)
 - [Getting Started](#getting_started)
 - [Circuit](#circuit)
-<!-- - [Server Details](#server)
-- [MQTT Topic Details](#mqtt)
-- [API Details](#api) -->
 - [Usage](#usage)
 - [List Of Components](#list)
 - [Built Using](#built_using)
@@ -78,15 +75,21 @@ You should have Arduino IDE Installed
 1.  Now copy the contents of the libs folder to the libraries directory of your Arduino
     1. If you are using windows, the libraries directory will be Documents/Arduino/libraries
 
-##### ESP32 Node FW Uploading
+##### ESP32 WiFi Node FW Uploading
 
 1.  Select ESP32 Dev Module from Tools->Board->ESP32
 2.  Select the correct port from Tools->Port
-3.  Then open Firmware.ino file,
+3.  Then open WiFiDevice.ino file from Firmware/WiFiDevice folder,
 4.  Select Tools > ESP32 Sketch Data Upload menu item. This should start uploading the files into ESP32 flash file system.
 5.  Now Upload the Code to your ESP32 Dev Module.
 6.  Your ESP32 is now ready to be used.
+##### ESP32 BLE Node FW Uploading
 
+1.  Select ESP32 Dev Module from Tools->Board->ESP32
+2.  Select the correct port from Tools->Port
+3.  Then open BLEScannerDevice.ino file from Firmware/BLEScannerDevice folder,
+4.  Now Upload the Code to your ESP32 Dev Module.
+5.  Your ESP32 is now ready to be used.
 ## Circuit <a name = "circuit"></a>
 
 ### ESP32 Dev Module Pinout
@@ -107,19 +110,18 @@ Here's the complete circuit diagram of the system.
 Other components pin connection details
 ```
 
-#### HC05 Bluetooth Module
+#### ESP32 Connections
 
-```HC05 Connected with ESP32```
+```TWO ESP32 Device Connections```
 
-| HC05 Pins | ESP32 | 
+| ESP32 BLE | ESP32 WiFi| 
 | :--- | :--- | 
-| `Key` | `3v3` (if not working use `Vin` pin) |
-| `VCC` | `Vin` |
+| `TX2` | `RX2` |
+| `RX2` | `TX2` |
 | `GND` | `GND` | 
-| `TX` | `RX2` | 
-| `RX` | `TX2` | 
+ 
 
-Note: If the scanning process does not start, connect Key pin to Vin pin instead of 3v3 pin of ESP32.
+Note: If the scanning process does not start, press EN button on both ESP32 devices.
 
 ## Usage <a name = "usage"></a>
 
@@ -130,13 +132,12 @@ Note: If the scanning process does not start, connect Key pin to Vin pin instead
 5.  The default access IP Address is `http://192.168.4.1/_ac` 
 6.  You will be presented with a main dashboard as shown below(based on your device)
 ![SCR1](artwork/scr1.png)
-
-7.  Once connected to a WiFi network, you can again access the captive portal using same URL or the IP Address from the Serial monitor.
-8. The data is published to the MQTT Topic `SBS/{hostname}` while the hostname is the one which you can define in Settings page of the captive portal.
+7. Go to Connect to WiFi tab and put your WiFi credentials to connect the ESP32 to the server.
+8.  Once connected to a WiFi network, you can again access the captive portal using same URL or the IP Address from the Serial monitor.
 9. You can open settings page with following default credentials
    1.  User: **SBS**
    2.  Password: **admin**
-10.  Dashbaord Link: https://nodered-proxy.production.wrapdrive.tech/ui/
+10.   Dashbaord Link: https://nodered-proxy.production.wrapdrive.tech/ui/#!/2
 
 ![Webapp](artwork/webapp.png)
 
@@ -144,10 +145,9 @@ Note: If the scanning process does not start, connect Key pin to Vin pin instead
 
 Following components are used to make this project
 
-1.  ESP32 Dev Module
+1.  2x ESP32 Dev Module
     ○ https://www.amazon.com/ESP32-WROOM-32-Development-ESP-32S-Bluetooth-Arduino/dp/B084KWNMM4/ref=sr_1_3?dchild=1&keywords=esp32+devkit&qid=1635342032&sr=8-3
-2.  HC05 Bluetooth Module
-    ○ https://www.amazon.com/Treedix-Bluetooth-Transceiver-Integrated-Communication/dp/B07YKP1BR5/ref=sr_1_5?keywords=hc05&qid=1641367355&sr=8-5
+
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
