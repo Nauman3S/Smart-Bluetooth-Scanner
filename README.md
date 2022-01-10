@@ -24,6 +24,7 @@
 - [Circuit](#circuit)
 - [Usage](#usage)
 - [List Of Components](#list)
+- [Demo Video](#demovideo)
 - [Built Using](#built_using)
 - [Authors](#authors)
 
@@ -147,6 +148,11 @@ Following components are used to make this project
 
 1.  2x ESP32 Dev Module
     ○ https://www.amazon.com/ESP32-WROOM-32-Development-ESP-32S-Bluetooth-Arduino/dp/B084KWNMM4/ref=sr_1_3?dchild=1&keywords=esp32+devkit&qid=1635342032&sr=8-3
+
+
+## 📽️ Demo Video <a name = "demovideo"></a>
+
+- [BLEScanner Demo](https://youtu.be/45gjfFNWENM) - BLE Scanner Demo Video
 
 
 ## ⛏️ Built Using <a name = "built_using"></a>
