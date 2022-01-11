@@ -96,7 +96,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "CREATE TABLE scan(    ID INTEGER PRIMARY KEY     AUTOINCREMENT,    MAC           TEXT    ,    Name            TEXT     ,    Address        TEXT,    RSSI\t\tText );",
+        "topic": "CREATE TABLE scan(    ID INTEGER PRIMARY KEY     AUTOINCREMENT,   Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, MAC           TEXT    ,    Name            TEXT     ,    Address        TEXT,    RSSI\t\tText );",
         "payloadType": "date",
         "x": 260,
         "y": 120,
