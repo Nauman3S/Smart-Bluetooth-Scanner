@@ -69,7 +69,7 @@ public:
     }
 };
 
-scanner sc;
+// scanner sc;
 String data = "";
 void setupCommHandler()
 {
@@ -88,6 +88,7 @@ void loopCommHandler()
         // Serial.println("----");
         // String a=ss.StringSeparator(data,'\0',0);
         mqttPublish("BLEScanner/device/data", data);
+        Serial.println(data);
         // mqttPublish("BLEScanner/device/data", ss.getMacAddress());
         // sc.addAddress(data);
         // sc.printAddress();
