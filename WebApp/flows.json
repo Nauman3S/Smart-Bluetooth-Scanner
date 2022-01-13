@@ -96,7 +96,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "topic": "CREATE TABLE scan(    ID INTEGER PRIMARY KEY     AUTOINCREMENT,   Timestamp DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')), MAC           TEXT    ,    Name            TEXT     ,    Address        TEXT,    RSSI\t\tText );",
+        "topic": "CREATE TABLE scan(    ID INTEGER PRIMARY KEY     AUTOINCREMENT,   Timestamp DATETIME DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f',(datetime('now','localtime')))), MAC           TEXT    ,    Name            TEXT     ,    Address        TEXT,    RSSI\t\tText );",
         "payloadType": "date",
         "x": 260,
         "y": 120,
@@ -118,8 +118,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 660,
-        "y": 120,
+        "x": 730,
+        "y": 60,
         "wires": []
     },
     {
@@ -250,7 +250,7 @@
         "z": "8a64b2be14e1014a",
         "group": "4a6b34b6c3a279f7",
         "name": "",
-        "order": 6,
+        "order": 7,
         "width": 19,
         "height": 15,
         "columns": [],
@@ -265,7 +265,7 @@
         "type": "debug",
         "z": "8a64b2be14e1014a",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -313,7 +313,7 @@
         "tooltip": "",
         "place": "Select option",
         "group": "4a6b34b6c3a279f7",
-        "order": 4,
+        "order": 2,
         "width": 8,
         "height": 1,
         "passthru": true,
@@ -392,37 +392,271 @@
         ]
     },
     {
-        "id": "c8e4702f61caac1e",
-        "type": "ui_spacer",
+        "id": "f23c35d7522741a5",
+        "type": "inject",
         "z": "8a64b2be14e1014a",
-        "name": "spacer",
-        "group": "4a6b34b6c3a279f7",
-        "order": 2,
-        "width": 1,
-        "height": 1
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 920,
+        "y": 240,
+        "wires": [
+            [
+                "1190b3a5a04241c8"
+            ]
+        ]
     },
     {
-        "id": "e227946b1a986f27",
-        "type": "ui_spacer",
+        "id": "1190b3a5a04241c8",
+        "type": "function",
         "z": "8a64b2be14e1014a",
-        "name": "spacer",
+        "name": "",
+        "func": "var dateFormat = function () {\n\tvar\ttoken = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\\1?|[LloSZ]|\"[^\"]*\"|'[^']*'/g,\n\t\ttimezone = /\\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\\d{4})?)\\b/g,\n\t\ttimezoneClip = /[^-+\\dA-Z]/g,\n\t\tpad = function (val, len) {\n\t\t\tval = String(val);\n\t\t\tlen = len || 2;\n\t\t\twhile (val.length < len) val = \"0\" + val;\n\t\t\treturn val;\n\t\t};\n\n\t// Regexes and supporting functions are cached through closure\n\treturn function (date, mask, utc) {\n\t\tvar dF = dateFormat;\n\n\t\t// You can't provide utc if you skip other args (use the \"UTC:\" mask prefix)\n\t\tif (arguments.length == 1 && Object.prototype.toString.call(date) == \"[object String]\" && !/\\d/.test(date)) {\n\t\t\tmask = date;\n\t\t\tdate = undefined;\n\t\t}\n\n\t\t// Passing date through Date applies Date.parse, if necessary\n\t\tdate = date ? new Date(date) : new Date;\n\t\tif (isNaN(date)) throw SyntaxError(\"invalid date\");\n\n\t\tmask = String(dF.masks[mask] || mask || dF.masks[\"default\"]);\n\n\t\t// Allow setting the utc argument via the mask\n\t\tif (mask.slice(0, 4) == \"UTC:\") {\n\t\t\tmask = mask.slice(4);\n\t\t\tutc = true;\n\t\t}\n\n\t\tvar\t_ = utc ? \"getUTC\" : \"get\",\n\t\t\td = date[_ + \"Date\"](),\n\t\t\tD = date[_ + \"Day\"](),\n\t\t\tm = date[_ + \"Month\"](),\n\t\t\ty = date[_ + \"FullYear\"](),\n\t\t\tH = date[_ + \"Hours\"](),\n\t\t\tM = date[_ + \"Minutes\"](),\n\t\t\ts = date[_ + \"Seconds\"](),\n\t\t\tL = date[_ + \"Milliseconds\"](),\n\t\t\to = utc ? 0 : date.getTimezoneOffset(),\n\t\t\tflags = {\n\t\t\t\td:    d,\n\t\t\t\tdd:   pad(d),\n\t\t\t\tddd:  dF.i18n.dayNames[D],\n\t\t\t\tdddd: dF.i18n.dayNames[D + 7],\n\t\t\t\tm:    m + 1,\n\t\t\t\tmm:   pad(m + 1),\n\t\t\t\tmmm:  dF.i18n.monthNames[m],\n\t\t\t\tmmmm: dF.i18n.monthNames[m + 12],\n\t\t\t\tyy:   String(y).slice(2),\n\t\t\t\tyyyy: y,\n\t\t\t\th:    H % 12 || 12,\n\t\t\t\thh:   pad(H % 12 || 12),\n\t\t\t\tH:    H,\n\t\t\t\tHH:   pad(H),\n\t\t\t\tM:    M,\n\t\t\t\tMM:   pad(M),\n\t\t\t\ts:    s,\n\t\t\t\tss:   pad(s),\n\t\t\t\tl:    pad(L, 3),\n\t\t\t\tL:    pad(L > 99 ? Math.round(L / 10) : L),\n\t\t\t\tt:    H < 12 ? \"a\"  : \"p\",\n\t\t\t\ttt:   H < 12 ? \"am\" : \"pm\",\n\t\t\t\tT:    H < 12 ? \"A\"  : \"P\",\n\t\t\t\tTT:   H < 12 ? \"AM\" : \"PM\",\n\t\t\t\tZ:    utc ? \"UTC\" : (String(date).match(timezone) || [\"\"]).pop().replace(timezoneClip, \"\"),\n\t\t\t\to:    (o > 0 ? \"-\" : \"+\") + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),\n\t\t\t\tS:    [\"th\", \"st\", \"nd\", \"rd\"][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10]\n\t\t\t};\n\n\t\treturn mask.replace(token, function ($0) {\n\t\t\treturn $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);\n\t\t});\n\t};\n}();\n\n// Some common format strings\ndateFormat.masks = {\n\t\"default\":      \"ddd mmm dd yyyy HH:MM:ss\",\n\tshortDate:      \"m/d/yy\",\n\tmediumDate:     \"mmm d, yyyy\",\n\tlongDate:       \"mmmm d, yyyy\",\n\tfullDate:       \"dddd, mmmm d, yyyy\",\n\tshortTime:      \"h:MM TT\",\n\tmediumTime:     \"h:MM:ss TT\",\n\tlongTime:       \"h:MM:ss TT Z\",\n\tisoDate:        \"yyyy-mm-dd\",\n\tisoTime:        \"HH:MM:ss\",\n\tisoDateTime:    \"yyyy-mm-dd'T'HH:MM:ss\",\n\tisoUtcDateTime: \"UTC:yyyy-mm-dd'T'HH:MM:ss'Z'\"\n};\n\n// Internationalization strings\ndateFormat.i18n = {\n\tdayNames: [\n\t\t\"Sun\", \"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\",\n\t\t\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"\n\t],\n\tmonthNames: [\n\t\t\"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\",\n\t\t\"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\", \"August\", \"September\", \"October\", \"November\", \"December\"\n\t]\n};\n\n// For convenience...\nDate.prototype.format = function (mask, utc) {\n\treturn dateFormat(this, mask, utc);\n};\nvar now = new Date();\n\n\nvar g=now.format(\"yyyy-mm-dd HH:MM:ss.l\");\nmsg.payload=g\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1100,
+        "y": 240,
+        "wires": [
+            [
+                "72d539e37c86a360"
+            ]
+        ]
+    },
+    {
+        "id": "72d539e37c86a360",
+        "type": "debug",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1250,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "2cad837bd07df74f",
+        "type": "csv",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\r\\n",
+        "temp": "ID,Timestamp,MAC,Name,Address,RSSI",
+        "skip": "0",
+        "strings": false,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 990,
+        "y": 20,
+        "wires": [
+            [
+                "698f8273fd27ba43",
+                "4aebf93709d96e75"
+            ]
+        ]
+    },
+    {
+        "id": "31aacaaae00e74c0",
+        "type": "file",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "filename": "",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1220,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "98109ef518ecad45",
+        "type": "sqlite",
+        "z": "8a64b2be14e1014a",
+        "mydb": "16d7cc710fadc2b8",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "database",
+        "x": 840,
+        "y": 120,
+        "wires": [
+            [
+                "698f8273fd27ba43",
+                "2cad837bd07df74f"
+            ]
+        ]
+    },
+    {
+        "id": "698f8273fd27ba43",
+        "type": "debug",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1190,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "4aebf93709d96e75",
+        "type": "file",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "filename": "data.csv",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1270,
+        "y": 120,
+        "wires": [
+            [
+                "2a2822f8dec98696"
+            ]
+        ]
+    },
+    {
+        "id": "68e03c703c275e9d",
+        "type": "http in",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "url": "/data.csv",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 590,
+        "y": 220,
+        "wires": [
+            [
+                "0a3440089814e94f"
+            ]
+        ]
+    },
+    {
+        "id": "2a2822f8dec98696",
+        "type": "http response",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1330,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "0a3440089814e94f",
+        "type": "function",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "func": "msg.topic=\"select * from scan group by Address;\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 180,
+        "wires": [
+            [
+                "98109ef518ecad45"
+            ]
+        ]
+    },
+    {
+        "id": "854b256ff22748b0",
+        "type": "ui_template",
+        "z": "8a64b2be14e1014a",
         "group": "4a6b34b6c3a279f7",
+        "name": "",
+        "order": 3,
+        "width": 3,
+        "height": 1,
+        "format": "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css\">\n<form method=\"get\" action=\"/data.csv\" download target=\"_blank\" download>\n       \n          \n       <button type=\"submit\" class=\"button is-primary\">Open CSV RAW</button>\n      \n</form>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 950,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ca6c83e0ad3d1bfe",
+        "type": "ui_template",
+        "z": "8a64b2be14e1014a",
+        "group": "4a6b34b6c3a279f7",
+        "name": "",
         "order": 5,
-        "width": 1,
-        "height": 1
+        "width": 3,
+        "height": 1,
+        "format": " \n \n <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css\">\n\n<a href=\"/data.csv\" class=\"button is-link\" download=\"data.csv\">Download CSV </a>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1110,
+        "y": 180,
+        "wires": [
+            []
+        ]
     },
     {
-        "id": "2ab6707f6c632c7e",
+        "id": "063a9064d56cbe03",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
         "group": "4a6b34b6c3a279f7",
-        "order": 7,
+        "order": 4,
         "width": 1,
         "height": 1
     },
     {
-        "id": "e623f96c1451e87b",
+        "id": "7ebee094495f3bcc",
+        "type": "ui_spacer",
+        "z": "8a64b2be14e1014a",
+        "name": "spacer",
+        "group": "4a6b34b6c3a279f7",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "f67527d10a51e11d",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -432,7 +666,7 @@
         "height": 1
     },
     {
-        "id": "c1a6d8203ed51887",
+        "id": "78248c14e4bd5752",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -442,7 +676,7 @@
         "height": 1
     },
     {
-        "id": "048a61d2e9ab1994",
+        "id": "9bc4339611170007",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -452,7 +686,7 @@
         "height": 1
     },
     {
-        "id": "3e2b28ce47ce26ca",
+        "id": "be9de6a81b9aef38",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -462,7 +696,7 @@
         "height": 1
     },
     {
-        "id": "0e01ed51e85315d0",
+        "id": "fb9db0c821da1352",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -472,7 +706,7 @@
         "height": 1
     },
     {
-        "id": "83f34fd597634c98",
+        "id": "ea658c13c46b0044",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -482,7 +716,7 @@
         "height": 1
     },
     {
-        "id": "556eac6b280e0c99",
+        "id": "01139c7fee45ff9a",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -492,7 +726,7 @@
         "height": 1
     },
     {
-        "id": "05c05ee025435277",
+        "id": "acea806542302b05",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -502,7 +736,7 @@
         "height": 1
     },
     {
-        "id": "53eb5a05b68674e6",
+        "id": "8716706abf8951a6",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -512,7 +746,7 @@
         "height": 1
     },
     {
-        "id": "a335647b8425e39e",
+        "id": "05cbfde81673383c",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -522,7 +756,7 @@
         "height": 1
     },
     {
-        "id": "e56b6f195395118d",
+        "id": "508e3eb82e39692d",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -532,7 +766,7 @@
         "height": 1
     },
     {
-        "id": "172369ef40640305",
+        "id": "ef623ce24dca874a",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -542,7 +776,7 @@
         "height": 1
     },
     {
-        "id": "02d1eaf8b3f892f1",
+        "id": "67915bdacad83c5c",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
@@ -552,12 +786,22 @@
         "height": 1
     },
     {
-        "id": "7237b455fe86e567",
+        "id": "3bee5b6e91f84b1d",
         "type": "ui_spacer",
         "z": "8a64b2be14e1014a",
         "name": "spacer",
         "group": "4a6b34b6c3a279f7",
         "order": 21,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "77e07214e4d28fef",
+        "type": "ui_spacer",
+        "z": "8a64b2be14e1014a",
+        "name": "spacer",
+        "group": "4a6b34b6c3a279f7",
+        "order": 22,
         "width": 1,
         "height": 1
     },
