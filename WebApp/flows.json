@@ -32,14 +32,15 @@
         "type": "debug",
         "z": "8a64b2be14e1014a",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 600,
+        "x": 580,
         "y": 520,
         "wires": []
     },
@@ -236,11 +237,12 @@
         "topic": "select Timestamp, MAC,Name,Address,RSSI from scan group by Address ORDER BY Timestamp DESC;",
         "topicType": "str",
         "x": 160,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "d445e9c19f877942",
-                "b5858cffbf92f0cb"
+                "b5858cffbf92f0cb",
+                "c3a81ba04951f9f7"
             ]
         ]
     },
@@ -363,8 +365,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 240,
-        "y": 440,
+        "x": 400,
+        "y": 360,
         "wires": [
             [
                 "3097985b97c6c697"
@@ -633,6 +635,51 @@
         "y": 180,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "c3a81ba04951f9f7",
+        "type": "trigger",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "op1": "",
+        "op2": "0",
+        "op1type": "pay",
+        "op2type": "str",
+        "duration": "-5",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 100,
+        "y": 440,
+        "wires": [
+            [
+                "a735907fe63d456d"
+            ]
+        ]
+    },
+    {
+        "id": "a735907fe63d456d",
+        "type": "function",
+        "z": "8a64b2be14e1014a",
+        "name": "topicSetSQL",
+        "func": "msg.topic=\"select Timestamp, MAC,Name,Address,RSSI from scan group by Address ORDER BY Timestamp DESC;\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 480,
+        "wires": [
+            [
+                "87201e186ac5f1fc",
+                "d445e9c19f877942"
+            ]
         ]
     },
     {
