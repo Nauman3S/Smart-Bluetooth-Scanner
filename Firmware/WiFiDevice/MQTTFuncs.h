@@ -5,22 +5,9 @@ void reconnect();
 bool mqttConnect();
 void mqttPublish(String path, String msg);
 int deviceExisits = 0;
-String cryptoNamePrice = "";
 
-void setCrypto(String np)
-{
-    cryptoNamePrice = np;
-}
-String getCrypto()
-{
-    if(cryptoNamePrice.length()>0){
-        return cryptoNamePrice;
-    }
-    else{
-        return String("Please Wait!");
-    }
-    
-}
+
+
 void MQTTUnSubscribe()
 {
     String topicN = String("SBS/device/config");
@@ -52,7 +39,7 @@ void callback(char *topic, byte *payload, unsigned int length)
     Serial.println();
     if (String(topic) == String("SBS/device/config"))
     {
-        setCrypto(pLoad);
+        
     }
 
     // Switch on the LED if an 1 was received as first character
