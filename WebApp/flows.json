@@ -11,7 +11,7 @@
         "type": "mqtt in",
         "z": "8a64b2be14e1014a",
         "name": "",
-        "topic": "MBLEScanner/device/data",
+        "topic": "BLEScanner/device/data",
         "qos": "0",
         "datatype": "auto",
         "broker": "28f7ceb9.8189a2",
@@ -32,7 +32,7 @@
         "type": "debug",
         "z": "8a64b2be14e1014a",
         "name": "",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -49,7 +49,7 @@
         "type": "function",
         "z": "8a64b2be14e1014a",
         "name": "scanParser",
-        "func": "var g=msg.payload\nvar data=g.split(';');\nmsg.payload=data;\nreturn msg;",
+        "func": "var g=msg.payload\ng=g.replace(',,,','')\nvar data=g.split(';');\nmsg.payload=data;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -157,7 +157,7 @@
         "type": "function",
         "z": "8a64b2be14e1014a",
         "name": "dbInsert",
-        "func": "var g=msg.payload\nvar mac=g[0].split(',')\ng[0]=mac[1]+','+mac[2]+','+mac[3]\n\nvar vals=\"\";\nvar spl;\ntry {\nfor (let i=0;i<5;i++){\n  g[i]=g[i].replace('\\r\\n','')\n  g[i]=g[i].replace('\\n','')\n  \n  g[i]=mac[0]+','+g[i];\n  spl=g[i].split(',');\n  g[i]='\\\"'+spl[0]+'\\\",\\\"'+spl[1]+'\\\",\\\"'+spl[2]+'\\\",\\\"'+spl[3]+'\\\"';\n  vals=vals+'('+g[i]+'),';\n  \n   \n}\n\nvals=vals.slice(0, -1);\n\n\nmsg.topic='INSERT INTO scan(MAC,Name,Address,RSSI) VALUES '+vals;\nreturn msg;\n}\ncatch(err){\n    \n}\n\n// for (let i = 0; i < g.length; i++) {\n// msg.topic='INSERT OR REPLACE INTO scan(MAC, Name, Address, RSSI) VALUES($MAC,$Name,$Address,$RSSI)'\n// msg.payload=g;\n// }\n//msg.payload=pHolders;\n",
+        "func": "var g=msg.payload\nvar mac=g[0].split(',')\ng[0]=mac[1]+','+mac[2]+','+mac[3]\n\nvar vals=\"\";\nvar spl;\n// try {\nfor (let i=0;i<g.length;i++){\n  g[i]=g[i].replace('\\r\\n','')\n  g[i]=g[i].replace('\\n','')\n  g[i]=g[i].replace(',,,','')\n  \n  g[i]=mac[0]+','+g[i];\n  spl=g[i].split(',');\n  g[i]='\\\"'+spl[0]+'\\\",\\\"'+spl[1]+'\\\",\\\"'+spl[2]+'\\\",\\\"'+spl[3]+'\\\"';\n  vals=vals+'('+g[i]+'),';\n  \n   \n}\n\nvals=vals.slice(0, -1);\n\n\nmsg.topic='INSERT INTO scan(MAC,Name,Address,RSSI) VALUES '+vals;\nreturn msg;\n// }\n// catch(err){\n    \n// }\n\n// for (let i = 0; i < g.length; i++) {\n// msg.topic='INSERT OR REPLACE INTO scan(MAC, Name, Address, RSSI) VALUES($MAC,$Name,$Address,$RSSI)'\n// msg.payload=g;\n// }\n//msg.payload=pHolders;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -267,7 +267,7 @@
         "type": "debug",
         "z": "8a64b2be14e1014a",
         "name": "",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -482,22 +482,6 @@
         ]
     },
     {
-        "id": "31aacaaae00e74c0",
-        "type": "file",
-        "z": "8a64b2be14e1014a",
-        "name": "",
-        "filename": "",
-        "appendNewline": true,
-        "createDir": false,
-        "overwriteFile": "false",
-        "encoding": "none",
-        "x": 1220,
-        "y": 560,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "98109ef518ecad45",
         "type": "sqlite",
         "z": "8a64b2be14e1014a",
@@ -526,8 +510,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1190,
-        "y": 80,
+        "x": 1250,
+        "y": 60,
         "wires": []
     },
     {
@@ -572,8 +556,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1330,
-        "y": 160,
+        "x": 1350,
+        "y": 180,
         "wires": []
     },
     {
@@ -581,7 +565,7 @@
         "type": "function",
         "z": "8a64b2be14e1014a",
         "name": "",
-        "func": "msg.topic=\"select * from scan group by Address;\"\nreturn msg;",
+        "func": "msg.topic=\"select * from scan;\"\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -877,7 +861,8 @@
         "willQos": "0",
         "willPayload": "",
         "willMsg": {},
-        "sessionExpiry": ""
+        "sessionExpiry": "",
+        "credentials": {}
     },
     {
         "id": "16d7cc710fadc2b8",

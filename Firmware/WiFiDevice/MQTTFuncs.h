@@ -58,7 +58,7 @@ void callback(char *topic, byte *payload, unsigned int length)
 void reconnect()
 {
     // Loop until we're reconnected
-    mqttClient.setBufferSize(2024);
+    mqttClient.setBufferSize(3024);
     while (!mqttClient.connected())
     {
         Serial.print("Attempting MQTT connection...");
@@ -85,7 +85,7 @@ void reconnect()
 }
 bool mqttConnect()
 {
-    mqttClient.setBufferSize(2024);
+    mqttClient.setBufferSize(3024);
     static const char alphanum[] = "0123456789"
                                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                    "abcdefghijklmnopqrstuvwxyz"; // For random generation of client ID.
