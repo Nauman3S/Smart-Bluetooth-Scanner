@@ -23,7 +23,8 @@
         "wires": [
             [
                 "306d39b8cec81274",
-                "87201e186ac5f1fc"
+                "87201e186ac5f1fc",
+                "912a219335179e3f"
             ]
         ]
     },
@@ -477,7 +478,7 @@
         "wires": [
             [
                 "698f8273fd27ba43",
-                "4aebf93709d96e75"
+                "2a2822f8dec98696"
             ]
         ]
     },
@@ -513,24 +514,6 @@
         "x": 1250,
         "y": 60,
         "wires": []
-    },
-    {
-        "id": "4aebf93709d96e75",
-        "type": "file",
-        "z": "8a64b2be14e1014a",
-        "name": "",
-        "filename": "data.csv",
-        "appendNewline": true,
-        "createDir": false,
-        "overwriteFile": "false",
-        "encoding": "none",
-        "x": 1270,
-        "y": 120,
-        "wires": [
-            [
-                "2a2822f8dec98696"
-            ]
-        ]
     },
     {
         "id": "68e03c703c275e9d",
@@ -657,15 +640,120 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 230,
+        "x": 250,
         "y": 480,
         "wires": [
             [
                 "87201e186ac5f1fc",
-                "d445e9c19f877942",
-                "0a3440089814e94f"
+                "d445e9c19f877942"
             ]
         ]
+    },
+    {
+        "id": "912a219335179e3f",
+        "type": "function",
+        "z": "8a64b2be14e1014a",
+        "name": "topicSetSQL",
+        "func": "msg.topic=\"select Timestamp, MAC,Name,Address,RSSI from scan group by Address ORDER BY Timestamp DESC;\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 840,
+        "wires": [
+            [
+                "2741d29251f8cf0a"
+            ]
+        ]
+    },
+    {
+        "id": "2741d29251f8cf0a",
+        "type": "function",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "func": "msg.topic=\"select * from scan;\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 840,
+        "wires": [
+            [
+                "4ce9cf265e6ddb9b"
+            ]
+        ]
+    },
+    {
+        "id": "4ce9cf265e6ddb9b",
+        "type": "sqlite",
+        "z": "8a64b2be14e1014a",
+        "mydb": "16d7cc710fadc2b8",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "database",
+        "x": 765,
+        "y": 827,
+        "wires": [
+            [
+                "c2e001ebccce1306"
+            ]
+        ]
+    },
+    {
+        "id": "c2e001ebccce1306",
+        "type": "csv",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\r\\n",
+        "temp": "ID,Timestamp,MAC,Name,Address,RSSI",
+        "skip": "0",
+        "strings": false,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 910,
+        "y": 780,
+        "wires": [
+            [
+                "0d6b46869fe6a57d"
+            ]
+        ]
+    },
+    {
+        "id": "0d6b46869fe6a57d",
+        "type": "file",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "filename": "data.csv",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1060,
+        "y": 780,
+        "wires": [
+            [
+                "de7524d6d066c59e"
+            ]
+        ]
+    },
+    {
+        "id": "de7524d6d066c59e",
+        "type": "http response",
+        "z": "8a64b2be14e1014a",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1210,
+        "y": 760,
+        "wires": []
     },
     {
         "id": "063a9064d56cbe03",
@@ -861,8 +949,7 @@
         "willQos": "0",
         "willPayload": "",
         "willMsg": {},
-        "sessionExpiry": "",
-        "credentials": {}
+        "sessionExpiry": ""
     },
     {
         "id": "16d7cc710fadc2b8",
