@@ -1,3 +1,4 @@
+#include "ntpTime.h"
 #define DataSerial Serial2
 
 
@@ -14,7 +15,7 @@ void loopCommHandler()
     if (DataSerial.available())
     {
         data = DataSerial.readString();
-        data = ss.getMacAddress() + String(",") + data;
+        data = ss.getMacAddress() + String(",") + data+getTimestamp();
         // Serial.println("----");
         // Serial.println(data);
         // Serial.println("----");

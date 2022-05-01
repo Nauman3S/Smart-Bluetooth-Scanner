@@ -3,6 +3,7 @@
 #include "webApp.h"    //Captive Portal webpages
 #include <FS.h>        //ESP32 File System
 #include "commHandler.h"
+
 IPAddress ipV(192, 168, 4, 1);
 String loadParams(AutoConnectAux &aux, PageArgument &args) //function to load saved settings
 {
@@ -99,6 +100,8 @@ void setup() //main setup functions
     Serial.begin(115200);
     delay(1000);
     setupCommHandler();
+    setupNTP();
+
     Serial.print("Device ID: ");
     Serial.println(ss.getMacAddress());
 
