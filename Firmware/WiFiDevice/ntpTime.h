@@ -37,12 +37,13 @@ void printLocalTime()
 
 String getTimestamp()
 {
-    struct tm timeinfo = {0};
+    struct tm timeinfo;
     if (!getLocalTime(&timeinfo))
     {
         Serial.println("Failed to obtain time");
-        return;
+        return String("0");
     }
+
     // printLocalTime();
     // char ts_char[50] = {0};
     // strftime(ts_char,sizeof(ts_char),"%H:%M:%S %d-%B-%Y", &timeinfo);
@@ -56,7 +57,7 @@ String getTimestamp()
     int day = timeinfo.tm_mday;
     int month = timeinfo.tm_mon + 1;
     int year = timeinfo.tm_year + 1900;
-
-    String ts = String(hour) + String(":") + String(minute) + String(":") + String(second) + String(" ") + String(day) + String("-") + String(month) + String("-") + String(year);
+    String ts = "0";
+    ts = String(hour) + String(":") + String(minute) + String(":") + String(second) + String(" ") + String(day) + String("-") + String(month) + String("-") + String(year);
     return ts;
 }
