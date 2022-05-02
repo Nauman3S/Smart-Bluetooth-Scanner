@@ -36,10 +36,12 @@ void printLocalTime()
 
 String getTimestamp()
 {
-    struct tm timeinfo;
+    struct tm timeinfo  = {0};
     printLocalTime();
     char ts_char[50] = {0};
-    strftime(ts_char,sizeof(ts_char),"%H:%M:%S %d-%B-%Y", &tm);
+    strftime(ts_char,sizeof(ts_char),"%H:%M:%S %d-%B-%Y", &timeinfo);
+    // strftime(ts_char,sizeof(ts_char),"%A, %B %d %Y %H:%M:%S", &tm);
+
     Serial.println("strftime output is " + String(ts_char));
     // int second = timeinfo.tm_sec;
     // int minute = timeinfo.tm_min;
