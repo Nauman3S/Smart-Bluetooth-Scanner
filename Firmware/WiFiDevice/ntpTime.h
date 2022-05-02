@@ -38,10 +38,15 @@ void printLocalTime()
 String getTimestamp()
 {
     struct tm timeinfo = {0};
-    printLocalTime();
+    if (!getLocalTime(&timeinfo))
+    {
+        Serial.println("Failed to obtain time");
+        return;
+    }
+    // printLocalTime();
     // char ts_char[50] = {0};
     // strftime(ts_char,sizeof(ts_char),"%H:%M:%S %d-%B-%Y", &timeinfo);
-    Serial.println(&timeinfo, "%H:%M:%S %d-%B-%Y");
+    Serial.println(&timeinfo, "NTP=%H:%M:%S %d-%B-%Y*");
     // strftime(ts_char,sizeof(ts_char),"%A, %B %d %Y %H:%M:%S", &tm);
 
     // Serial.println("strftime output is " + String(ts_char));
