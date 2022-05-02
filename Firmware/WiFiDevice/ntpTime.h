@@ -1,6 +1,6 @@
 #include "time.h"
 
-const char* ntpServer = "il.pool.ntp.org";
+const char *ntpServer = "il.pool.ntp.org";
 
 // struct tm timeinfo;
 // struct tm
@@ -16,10 +16,11 @@ const char* ntpServer = "il.pool.ntp.org";
 // int    tm_yday;  //   Day of year [0,365].
 // int    tm_isdst; //   Daylight Savings flag.
 // }
-const long  gmtOffset_sec = 3600;
-const int   daylightOffset_sec = 3600;
+const long gmtOffset_sec = 3600;
+const int daylightOffset_sec = 3600;
 
-void setupNTP(){
+void setupNTP()
+{
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
 }
 
@@ -31,25 +32,26 @@ void printLocalTime()
         Serial.println("Failed to obtain time");
         return;
     }
-    Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+    // Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
 }
 
 String getTimestamp()
 {
-    struct tm timeinfo  = {0};
+    struct tm timeinfo = {0};
     printLocalTime();
-    char ts_char[50] = {0};
-    strftime(ts_char,sizeof(ts_char),"%H:%M:%S %d-%B-%Y", &timeinfo);
+    // char ts_char[50] = {0};
+    // strftime(ts_char,sizeof(ts_char),"%H:%M:%S %d-%B-%Y", &timeinfo);
+    Serial.println(&timeinfo, "%H:%M:%S %d-%B-%Y");
     // strftime(ts_char,sizeof(ts_char),"%A, %B %d %Y %H:%M:%S", &tm);
 
-    Serial.println("strftime output is " + String(ts_char));
-    // int second = timeinfo.tm_sec;
-    // int minute = timeinfo.tm_min;
-    // int hour = timeinfo.tm_hour;
-    // int day = timeinfo.tm_mday;
-    // int month = timeinfo.tm_mon + 1;
-    // int year = timeinfo.tm_year + 1900;
+    // Serial.println("strftime output is " + String(ts_char));
+    int second = timeinfo.tm_sec;
+    int minute = timeinfo.tm_min;
+    int hour = timeinfo.tm_hour;
+    int day = timeinfo.tm_mday;
+    int month = timeinfo.tm_mon + 1;
+    int year = timeinfo.tm_year + 1900;
 
-    String ts = String(ts_char);
+    String ts = String(hour) + String(":") + String(minute) + String(":") + String(second) + String(" ") + String(day) + String("-") + String(month) + String("-") + String(year);
     return ts;
 }
