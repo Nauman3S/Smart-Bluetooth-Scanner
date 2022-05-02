@@ -38,13 +38,16 @@ String getTimestamp()
 {
     struct tm timeinfo;
     printLocalTime();
-    int second = timeinfo.tm_sec;
-    int minute = timeinfo.tm_min;
-    int hour = timeinfo.tm_hour;
-    int day = timeinfo.tm_mday;
-    int month = timeinfo.tm_mon + 1;
-    int year = timeinfo.tm_year + 1900;
+    char ts_char[50] = {0};
+    strftime(ts_char,sizeof(ts_char),"%H:%M:%S %d-%B-%Y", &tm);
+    Serial.println("strftime output is " + String(ts_char));
+    // int second = timeinfo.tm_sec;
+    // int minute = timeinfo.tm_min;
+    // int hour = timeinfo.tm_hour;
+    // int day = timeinfo.tm_mday;
+    // int month = timeinfo.tm_mon + 1;
+    // int year = timeinfo.tm_year + 1900;
 
-    String ts = String(hour) + String(":") + String(minute) + String(":") + String(second) + String(" ") + String(day) + String("-") + String(month) + String("-") + String(year);
+    String ts = String(ts_char);
     return ts;
 }
