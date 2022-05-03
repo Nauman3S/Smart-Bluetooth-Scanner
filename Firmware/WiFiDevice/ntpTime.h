@@ -1,6 +1,6 @@
 #include "time.h"
 
-const char *ntpServer = "il.pool.ntp.org";
+const char *ntpServer = "pool.ntp.org";
 
 // struct tm timeinfo;
 // struct tm
@@ -57,7 +57,7 @@ String getTimestamp()
     int day = timeinfo.tm_mday;
     int month = timeinfo.tm_mon + 1;
     int year = timeinfo.tm_year + 1900;
-    String ts = "0";
-    ts = String(hour) + String(":") + String(minute) + String(":") + String(second) + String(" ") + String(day) + String("-") + String(month) + String("-") + String(year);
+    String ts = "";
+    // ts = String(hour) + String(":") + String(minute) + String(":") + String(second) + String(" ") + String(day) + String("-") + String(month) + String("-") + String(year);
     return ts;
 }
